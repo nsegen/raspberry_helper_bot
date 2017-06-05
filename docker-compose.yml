@@ -1,0 +1,45 @@
+version: "2"
+services:
+
+  cups:
+    image: aadl/cups-alpine
+    env_file: .env
+    ports:
+      - "631:631"
+
+  bot:
+    build: ./bot
+    volumes:
+      - ./bot:/www
+    depends_on:
+      - postgres
+      - cups
+    ports:
+      - "8001:8001"
+    command: bash start.sh
+    env_file: .env
+    links:
+      - postgres:postgres
+      - cups:cups
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      - ./nginx/ssl:/etc/nginx/ssl
+    volumes_from:
+      - bot
+      - cups
+    depends_on:
+      - bot
+      - cups
+    env_file: .env
+
+  postgres:
+    image: postgres:9.5
+    volumes:
+      - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata
+    env_file: .env
