@@ -8,9 +8,10 @@ services:
       - "631:631"
 
   bot:
-    build: ./bot
+    build: ./service
     volumes:
-      - ./bot:/www
+      - ./service:/bot
+      - ./nginx/ssl:/bot/certificates
     depends_on:
       - postgres
       - cups
@@ -25,7 +26,7 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - "80:80"
+      - "8080:80"
       - "443:443"
     volumes:
       - ./nginx/sites-enabled:/etc/nginx/sites-enabled

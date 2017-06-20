@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 @bot.message_handler(content_types=['document'])
 def document_message_handler(message):
+    logger.debug('document')
     file_id = message.document.file_id
     file_info = bot.get_file(file_id)
     file = requests.get(
