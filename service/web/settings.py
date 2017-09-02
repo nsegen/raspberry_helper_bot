@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bot',
+    'storage',
 ]
 
 MIDDLEWARE = [
@@ -89,16 +91,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-# Password validation
-# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -134,56 +126,35 @@ USE_TZ = True
 
 if DEBUG:
     STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "static"),
+        os.path.join(BASE_DIR, 'static'),
     ]
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "attachments")
+MEDIA_ROOT = os.path.join(BASE_DIR, 'attachments')
 MEDIA_URL = '/attachments/'
 
-REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
-}
-SCANNER_STORAGE_BASE_URL = 'https://else:7kjfWVWcRN@avatar3d.ibv.org:8443/webdav/ELSE/'
 
-MAGENTO_BASE_URL = u'http://13.94.238.143/rest/'
+# Telegram settings
 
-CUSTOMER_KEY = 'u017h89sncv1jkt5pd0vf8g1tilqvq90'
-CUSTOMER_SECRET = 'ac1w0fyaaa2fo0giwe5ripryil0837g1'
-ASSESS_TOKEN = 'wbs1gdtgbl0nj8ckthmslhhf1iv4ywdc'
-ASSESS_TOKEN_SECRET = 'djdj7wn0uq04nlowphfxexh9hrm2ne9o'
+BOT_TOKEN = '377505050:AAF_XN_7ShVqAmOC-xsIc_dH3IDT36VfVLE'
+WEBHOOK_HOST = 'raspberryhelper.ddns.net'
+WEBHOOK_PORT = '443'
 
-ELSE_3D_SERVICE_URL = u"http://else-3d-service.cloudapp.net/api"
-ELSE_3D_SERVICE_SCRIPTS_URL = 'http://else-3d-service.cloudapp.net/scripts/'
+SSL_CRT = '%s/certificates/nginx.crt' % BASE_DIR
+SSL_KEY = '%s/certificates/nginx.key' % BASE_DIR
 
-DEFAULT_SHOES_SIZE = 37
+WEBHOOK_URL_BASE = 'https://%s:%s/bot/messages' % (WEBHOOK_HOST, WEBHOOK_PORT)
 
-# EMAIL_NOTIFICATION_ADDRESS = 'custom-orders@else.shoes'
-# EMAIL_USE_TLS = False
-# EMAIL_HOST = 'maildev'
-# EMAIL_PORT = 25
-
-EMAIL_HOST = 'authsmtp.else.shoes'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = "orders@else.shoes"
-EMAIL_HOST_PASSWORD = 'FD.8673_DSW'
-EMAIL_USE_SSL = False
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-    )
-}
-
+DEFAULT_PRINTER = 'xerox_phaser'
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s %(funcName)s(...)] %(message)s",
-            'datefmt': "%d/%b/%Y %H:%M:%S"
+            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s %(funcName)s(...)] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -200,15 +171,11 @@ LOGGING = {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
-        'api': {
+        'bot': {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
-        'else_ware': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-        'fitting': {
+        'web': {
             'handlers': ['console'],
             'level': 'DEBUG',
         },

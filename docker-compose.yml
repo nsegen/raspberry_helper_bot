@@ -7,16 +7,14 @@ services:
     ports:
       - "631:631"
 
-  bot:
+  service:
     build: ./service
     volumes:
-      - ./service:/bot
-      - ./nginx/ssl:/bot/certificates
+      - ./service:/www
+      - ./nginx/ssl:/www/certificates
     depends_on:
       - postgres
       - cups
-    ports:
-      - "8001:8001"
     command: bash start.sh
     env_file: .env
     links:
@@ -26,21 +24,37 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - "8080:80"
+      - "80:80"
       - "443:443"
     volumes:
       - ./nginx/sites-enabled:/etc/nginx/sites-enabled
       - ./nginx/ssl:/etc/nginx/ssl
     volumes_from:
-      - bot
+      - service
       - cups
+      - sync
     depends_on:
-      - bot
+      - service
       - cups
+      - sync
     env_file: .env
 
   postgres:
     image: postgres:9.5
     volumes:
       - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata
+    env_file: .env
+
+  sync:
+    image: resilio/sync
+    ports:
+      - "55555:55555"
+    volumes:
+      - ./service/attachments/sync:/mnt/sync
+    volumes_from:
+      - service
+    depends_on:
+      - service
+    links:
+      - service:service
     env_file: .env
