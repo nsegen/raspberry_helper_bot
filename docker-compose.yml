@@ -50,7 +50,24 @@ services:
     ports:
       - "55555:55555"
     volumes:
-      - ./service/attachments/sync:/mnt/sync
+      - ./service/attachments:/mnt/sync
+    volumes_from:
+      - service
+    depends_on:
+      - service
+    links:
+      - service:service
+    env_file: .env
+
+  deluge:
+    image: twanislas/deluge
+    ports:
+      - "8112:8112"
+      - "58846:58846"
+      - "53160:53160"
+    volumes:
+      - ./service/attachments:/data
+      - ./deluge:/config
     volumes_from:
       - service
     depends_on:
