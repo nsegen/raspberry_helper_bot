@@ -1,7 +1,5 @@
-FROM python:3.6
+FROM armhf/python:3.6
 ADD pyipptool.cfg/ /etc/pyipptool/pyipptool.cfg
-RUN pwd
-RUN ls -la
 RUN mkdir /www
 WORKDIR /www
 ADD ./requirements.txt /www/requirements.txt
