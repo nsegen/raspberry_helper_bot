@@ -1,11 +1,14 @@
 version: "2"
 services:
 
-  # cups:
-  #   image: aadl/cups-alpine
-  #   env_file: .env
-  #   ports:
-  #     - "631:631"
+  cups:
+    image: a0js/rpi-cups
+    env_file: .env
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+      - /dev/bus/usb:/dev/bus/usb
+    ports:
+      - "631:631"
 
   service:
     build: ./service
@@ -14,12 +17,12 @@ services:
       - ./nginx/ssl:/www/certificates
     depends_on:
       - postgres
-      # - cups
+      - cups
     command: bash start.sh
     env_file: .env
     links:
       - postgres:postgres
-      # - cups:cups
+      - cups:cups
 
   nginx:
     build: ./nginx
@@ -31,12 +34,12 @@ services:
       - ./nginx/ssl:/etc/nginx/ssl:ro
     volumes_from:
       - service
-      # - cups
-      # - sync
+      - cups
+      - sync
     depends_on:
       - service
-      # - cups
-      # - sync
+      - cups
+      - sync
     env_file: .env
 
   postgres:
@@ -47,33 +50,32 @@ services:
       - ./dockerfiles:/var/lib/postgresql/data
     env_file: .env
 
-  # sync:
-  #   image: resilio/sync
-  #   ports:
-  #     - "55555:55555"
-  #   volumes:
-  #     - ./service/attachments:/mnt/sync
-  #   volumes_from:
-  #     - service
-  #   depends_on:
-  #     - service
-  #   links:
-  #     - service:service
-  #   env_file: .env
+  sync:
+    image: yangxuan8282/rpi-resilio-sync
+    ports:
+      - "55555:55555"
+    volumes:
+      - ./service/attachments:/mnt/sync
+    volumes_from:
+      - service
+    depends_on:
+      - service
+    links:
+      - service:service
+    env_file: .env
 
-  # deluge:
-  #   image: twanislas/deluge
-  #   ports:
-  #     - "8112:8112"
-  #     - "58846:58846"
-  #     - "53160:53160"
-  #   volumes:
-  #     - ./service/attachments:/data
-  #     - ./deluge:/config
-  #   volumes_from:
-  #     - service
-  #   depends_on:
-  #     - service
-  #   links:
-  #     - service:service
-  #   env_file: .env
+  deluge:
+    image: jordancrawford/rpi-deluge
+    ports:
+      - "8112:8112"
+      - "58846:58846"
+    volumes:
+      - ./service/attachments:/data
+      - ./deluge:/config
+    volumes_from:
+      - service
+    depends_on:
+      - service
+    links:
+      - service:service
+    env_file: .env

@@ -64,7 +64,7 @@ server {
         proxy_busy_buffers_size    64k;
         proxy_temp_file_write_size 64k;
 
-        # proxy_pass https://sync:8888;
+        proxy_pass https://sync:8888;
         proxy_redirect     off;
         proxy_set_header   Host $host;
         proxy_set_header   X-Real-IP $remote_addr;
