@@ -44,7 +44,7 @@ services:
     ports: 
       - "5432:5432"
     volumes:
-      - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata
+      - ./dockerfiles:/var/lib/postgresql/data
     env_file: .env
 
   # sync:
