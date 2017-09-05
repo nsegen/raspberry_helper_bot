@@ -40,7 +40,7 @@ services:
   #   env_file: .env
 
   postgres:
-    image: postgres:9.5.8-alpine
+    image: tobi312/rpi-postgresql
     volumes:
       - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata
     env_file: .env
