@@ -1,11 +1,11 @@
 version: "2"
 services:
 
-  cups:
-    image: aadl/cups-alpine
-    env_file: .env
-    ports:
-      - "631:631"
+  # cups:
+  #   image: aadl/cups-alpine
+  #   env_file: .env
+  #   ports:
+  #     - "631:631"
 
   service:
     build: ./service
@@ -14,30 +14,30 @@ services:
       - ./nginx/ssl:/www/certificates
     depends_on:
       - postgres
-      - cups
+      # - cups
     command: bash start.sh
     env_file: .env
     links:
       - postgres:postgres
-      - cups:cups
+      # - cups:cups
 
-  nginx:
-    build: ./nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
-      - ./nginx/ssl:/etc/nginx/ssl
-    volumes_from:
-      - service
-      - cups
-      - sync
-    depends_on:
-      - service
-      - cups
-      - sync
-    env_file: .env
+  # nginx:
+  #   build: ./nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+  #     - ./nginx/ssl:/etc/nginx/ssl
+  #   volumes_from:
+  #     - service
+  #     - cups
+  #     - sync
+  #   depends_on:
+  #     - service
+  #     - cups
+  #     - sync
+  #   env_file: .env
 
   postgres:
     image: postgres:9.5
@@ -45,33 +45,33 @@ services:
       - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata
     env_file: .env
 
-  sync:
-    image: resilio/sync
-    ports:
-      - "55555:55555"
-    volumes:
-      - ./service/attachments:/mnt/sync
-    volumes_from:
-      - service
-    depends_on:
-      - service
-    links:
-      - service:service
-    env_file: .env
+  # sync:
+  #   image: resilio/sync
+  #   ports:
+  #     - "55555:55555"
+  #   volumes:
+  #     - ./service/attachments:/mnt/sync
+  #   volumes_from:
+  #     - service
+  #   depends_on:
+  #     - service
+  #   links:
+  #     - service:service
+  #   env_file: .env
 
-  deluge:
-    image: twanislas/deluge
-    ports:
-      - "8112:8112"
-      - "58846:58846"
-      - "53160:53160"
-    volumes:
-      - ./service/attachments:/data
-      - ./deluge:/config
-    volumes_from:
-      - service
-    depends_on:
-      - service
-    links:
-      - service:service
-    env_file: .env
+  # deluge:
+  #   image: twanislas/deluge
+  #   ports:
+  #     - "8112:8112"
+  #     - "58846:58846"
+  #     - "53160:53160"
+  #   volumes:
+  #     - ./service/attachments:/data
+  #     - ./deluge:/config
+  #   volumes_from:
+  #     - service
+  #   depends_on:
+  #     - service
+  #   links:
+  #     - service:service
+  #   env_file: .env
