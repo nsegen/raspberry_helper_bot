@@ -21,26 +21,28 @@ services:
       - postgres:postgres
       # - cups:cups
 
-  # nginx:
-  #   build: ./nginx
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./nginx/sites-enabled:/etc/nginx/sites-enabled
-  #     - ./nginx/ssl:/etc/nginx/ssl
-  #   volumes_from:
-  #     - service
-  #     - cups
-  #     - sync
-  #   depends_on:
-  #     - service
-  #     - cups
-  #     - sync
-  #   env_file: .env
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    volumes_from:
+      - service
+      # - cups
+      # - sync
+    depends_on:
+      - service
+      # - cups
+      # - sync
+    env_file: .env
 
   postgres:
     image: tobi312/rpi-postgresql
+    ports: 
+      - "5432:5432"
     volumes:
       - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata
     env_file: .env
