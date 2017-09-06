@@ -19,8 +19,6 @@ services:
     depends_on:
       - postgres
       - cups
-    volumes_from:
-      - nginx
     command: bash start.sh
     env_file: .env
     links:
