@@ -1,4 +1,5 @@
 version: "2"
+
 services:
 
   cups:
@@ -14,10 +15,12 @@ services:
     build: ./service
     volumes:
       - ./service:/www
-      - ./nginx/ssl:/www/certificates
+      - data_storage:/www/attachments:rw
     depends_on:
       - postgres
       - cups
+    volumes_from:
+      - nginx
     command: bash start.sh
     env_file: .env
     links:
@@ -32,10 +35,6 @@ services:
     volumes:
       - ./nginx/sites-enabled:/etc/nginx/sites-enabled
       - ./nginx/ssl:/etc/nginx/ssl:ro
-    volumes_from:
-      - service
-      - cups
-      - sync
     depends_on:
       - service
       - cups
@@ -55,13 +54,7 @@ services:
     ports:
       - "55555:55555"
     volumes:
-      - ./service/attachments:/mnt/sync
-    volumes_from:
-      - service
-    depends_on:
-      - service
-    links:
-      - service:service
+      - data_storage:/mnt/sync:rw
     env_file: .env
 
   deluge:
@@ -70,12 +63,10 @@ services:
       - "8112:8112"
       - "58846:58846"
     volumes:
-      - ./service/attachments:/data
+      - data_storage:/data:rw
       - ./deluge:/config
-    volumes_from:
-      - service
-    depends_on:
-      - service
-    links:
-      - service:service
     env_file: .env
+
+volumes:
+
+  data_storage:

@@ -17,7 +17,7 @@ if [ $PRERUN = "true" ]; then
     echo "exec(open('prerun.py').read())" | python manage.py shell
 fi
 
-chmod 777 attachments
+chmod 777 -R attachments
 if [ $DJANGO_DEBUG = "true" ]; then
     echo "[START] launch app in DEBUG mode"
     python manage.py runserver 0.0.0.0:8000
