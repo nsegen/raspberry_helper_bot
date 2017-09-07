@@ -3,7 +3,8 @@ version: "2"
 services:
 
   cups:
-    image: a0js/rpi-cups
+    image: aadl/cups-alpine
+    # image: a0js/rpi-cups
     env_file: .env
     volumes:
       - /var/run/dbus:/var/run/dbus
@@ -40,7 +41,8 @@ services:
     env_file: .env
 
   postgres:
-    image: tobi312/rpi-postgresql
+    image: postgres:9.5
+    # image: tobi312/rpi-postgresql
     ports: 
       - "5432:5432"
     volumes:
@@ -48,7 +50,8 @@ services:
     env_file: .env
 
   sync:
-    image: yangxuan8282/rpi-resilio-sync
+    image: resilio/sync
+    # image: yangxuan8282/rpi-resilio-sync
     ports:
       - "55555:55555"
     volumes:
@@ -56,7 +59,8 @@ services:
     env_file: .env
 
   deluge:
-    image: jordancrawford/rpi-deluge
+    image: twanislas/deluge
+    # image: jordancrawford/rpi-deluge
     ports:
       - "8112:8112"
       - "58846:58846"
