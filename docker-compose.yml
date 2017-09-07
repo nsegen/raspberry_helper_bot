@@ -15,7 +15,7 @@ services:
     build: ./service
     volumes:
       - ./service:/www
-      # - data_storage:/www/attachments:rw
+      - data_storage:/www/attachments:rw
     depends_on:
       - postgres
       - cups
