@@ -28,7 +28,7 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - "80:80"
+      - "88:80"
       - "443:443"
     volumes:
       - ./nginx/sites-enabled:/etc/nginx/sites-enabled
@@ -50,6 +50,7 @@ services:
   sync:
     image: yangxuan8282/rpi-resilio-sync
     ports:
+      - "8888:8888"
       - "55555:55555"
     volumes:
       - data_storage:/mnt/sync:rw
