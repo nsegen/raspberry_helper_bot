@@ -28,7 +28,7 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - "88:80"
+      - "80:80"
       - "443:443"
     volumes:
       - ./nginx/sites-enabled:/etc/nginx/sites-enabled
