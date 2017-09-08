@@ -53,6 +53,7 @@ services:
     image: resilio/sync
     # image: yangxuan8282/rpi-resilio-sync
     ports:
+      - "8888:8888"
       - "55555:55555"
     volumes:
       - data_storage:/mnt/sync:rw
