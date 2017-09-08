@@ -15,11 +15,9 @@ config = {'ipptool_path': '/',
 # Create your views here.
 
 
-def attachment_action(request, pk):
+def print_files(request, pk):
     
-    # ipptool = pyipptool.core.IPPToolWrapper(config)
-    # response = ipptool.cups_get_printers()
-    logger.debug(response)
+    logger.debug(request)
     return HttpResponseRedirect(
         reverse('admin:storage_attachmentproxy_changelist',)
     )
