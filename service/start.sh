@@ -20,8 +20,10 @@ fi
 chmod 777 -R attachments
 if [ $DJANGO_DEBUG = "true" ]; then
     echo "[START] launch app in DEBUG mode"
+    nohup celery -A web worker -B -l info &
     python manage.py runserver 0.0.0.0:8000
 else
+    nohup celery -A web worker -B -l info &
     python manage.py collectstatic --noinput
     echo "[START] launch app in RELEASE mode"
     uwsgi --chdir=. \

@@ -34,7 +34,7 @@ class Record(Base):
     )
 
     def __str__(self):
-        return self.uuid
+        return f'{self.record_type}({self.uuid})'
 
     class Meta:
         verbose_name = 'Record'
