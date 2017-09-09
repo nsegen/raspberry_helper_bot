@@ -20,6 +20,7 @@ services:
     depends_on:
       - postgres
       - cups
+      - redis
     command: bash start.sh
     env_file: .env
     links:
@@ -68,6 +69,10 @@ services:
     volumes:
       - data_storage:/data:rw
       - ./deluge:/config
+    env_file: .env
+
+  redis:
+    image: redis:latest
     env_file: .env
 
 volumes:

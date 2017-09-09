@@ -3,3 +3,6 @@ psycopg2==2.6.2
 requests==2.12.5
 simplejson==3.10.0
 pyTelegramBotAPI>=2.3.1
+django-celery==3.2.1
+redis==2.10.5
+pathlib==1.0.1

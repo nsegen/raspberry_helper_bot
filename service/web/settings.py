@@ -182,3 +182,8 @@ LOGGING = {
     },
 }
 
+# Celery
+BROKER_URL = os.getenv('REDIS_BROKER_URL', 'redis://localhost:6379')
+CELERY_RESULT_BACKEND = os.getenv('REDIS_CELERY_RESULT_BACKEND', 'redis://localhost:6379')
+CELERY_TIMEZONE = os.getenv('REDIS_CELERY_TIMEZONE', 'Africa/Nairobi')
+CELERY_IMPORTS = ('bot.tasks', )
