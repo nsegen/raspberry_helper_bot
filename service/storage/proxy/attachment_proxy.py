@@ -24,6 +24,7 @@ class AttachmentModelAdmin(BaseModelAdmin):
     ]
 
     list_display = [
+        'record',
         'extension',
         'file',
         'created',
@@ -31,5 +32,7 @@ class AttachmentModelAdmin(BaseModelAdmin):
 
     search_fields = (
         'extension',
+        'record__record_type__name',
+        'record__uuid'
     )
 
