@@ -34,7 +34,6 @@ def add_folder(path):
         record = Record(record_type=record_type)
         record.save()
     for file in path.rglob('*.*'):
-        print(file)
         if not Attachment.objects.filter(file=file.relative_to(settings.MEDIA_ROOT)).exists():
             attachment = Attachment(
                 record=record,
