@@ -1,6 +1,15 @@
-version: "2"
+version: "3"
 
 services:
+
+  pulseaudio:
+    image: jess/pulseaudio
+    devices:
+      - /dev/snd
+    volumes:
+      - /etc/localtime:/etc/localtime
+    ports:
+      - "4713:4713"
 
   cups:
     # image: aadl/cups-alpine
@@ -9,6 +18,8 @@ services:
     volumes:
       - /var/run/dbus:/var/run/dbus
       - /dev/bus/usb:/dev/bus/usb
+    devices:
+      - /dev/usb
     ports:
       - "631:631"
 
@@ -21,9 +32,12 @@ services:
       - postgres
       - cups
       - redis
+    devices:
+      - /dev/snd
     command: bash start.sh
     env_file: .env
     links:
+      - pulseaudio:pulseaudio
       - postgres:postgres
       - cups:cups
 
