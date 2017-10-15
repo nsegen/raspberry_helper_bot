@@ -1,5 +1,5 @@
-FROM alpine:3.4
-# FROM armhf/alpine:3.4
+# FROM alpine:3.4
+FROM armhf/alpine:3.4
 
 RUN apk add --update --no-cache \
 	cups-filters 'cups<2.2.4' --allow-untrusted && \

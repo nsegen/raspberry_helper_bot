@@ -56,8 +56,8 @@ services:
     env_file: .env
 
   postgres:
-    image: postgres:9.5
-    # image: tobi312/rpi-postgresql
+    # image: postgres:9.5
+    image: tobi312/rpi-postgresql
     ports: 
       - "5432:5432"
     volumes:
@@ -65,8 +65,8 @@ services:
     env_file: .env
 
   sync:
-    image: resilio/sync
-    # image: yangxuan8282/rpi-resilio-sync
+    # image: resilio/sync
+    image: yangxuan8282/rpi-resilio-sync
     ports:
       - "8888:8888"
       - "55555:55555"
@@ -75,8 +75,8 @@ services:
     env_file: .env
 
   deluge:
-    image: twanislas/deluge
-    # image: jordancrawford/rpi-deluge
+    # image: twanislas/deluge
+    image: jordancrawford/rpi-deluge
     ports:
       - "8112:8112"
       - "58846:58846"
@@ -86,8 +86,8 @@ services:
     env_file: .env
 
   redis:
-    image: redis:latest
-    # image: hypriot/rpi-redis
+    # image: redis:latest
+    image: hypriot/rpi-redis
     env_file: .env
 
 volumes:

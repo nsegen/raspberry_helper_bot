@@ -1,5 +1,5 @@
-FROM python:3.6
-#FROM resin/raspberrypi3-python:3.6
+# FROM python:3.6
+FROM resin/raspberrypi3-python:3.6
 RUN mkdir /www
 WORKDIR /www
 #RUN	apt-get update && apt-get install -y \
