@@ -90,6 +90,14 @@ services:
     # image: hypriot/rpi-redis
     env_file: .env
 
+  # plex:
+  #   image: binhex/arch-plex:latest
+  #   volumes:
+  #     - data_storage:/media
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ./plex_config:/config
+  #   env_file: .env
+
 volumes:
 
   data_storage:

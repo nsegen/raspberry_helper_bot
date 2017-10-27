@@ -13,7 +13,9 @@ RUN apk add --update --no-cache \
 VOLUME /etc/cups/ /var/log/cups /var/spool/cups /var/spool/cups-pdf /var/cache/cups
 
 COPY start_cups.sh /root/start-cups.sh
+# COPY driver /root/driver
 RUN chmod +x /root/start-cups.sh
+# RUN chmod +x -R /root/driver
 
 CMD ["/root/start-cups.sh"]
 
