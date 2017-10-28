@@ -98,6 +98,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       # - ./plex_config:/config
     env_file: .env
+    ports:
+      - "32400:32400"
 
 volumes:
 
