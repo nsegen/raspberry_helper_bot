@@ -2,14 +2,14 @@ version: "2"
 
 services:
 
-  pulseaudio:
-    image: jess/pulseaudio
-    devices:
-      - /dev/snd
-    volumes:
-      - /etc/localtime:/etc/localtime
-    ports:
-      - "4713:4713"
+  # pulseaudio:
+  #   image: jess/pulseaudio
+  #   devices:
+  #     - /dev/snd
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime
+  #   ports:
+  #     - "4713:4713"
 
   cups:
     build: ./cups
@@ -17,62 +17,64 @@ services:
     volumes:
       - /var/run/dbus:/var/run/dbus
       - /dev/bus/usb:/dev/bus/usb
-    devices:
-      - /dev/usb
+    # devices:
+    #   - /dev/usb
     # command: bash start-cups.sh
     ports:
-      - "631:631"
+      - "630:631"
+    restart: always
 
-  service:
-    build: ./service
-    volumes:
-      - ./service:/www
-      - data_storage:/www/attachments:rw
-    depends_on:
-      - postgres
-      - cups
-      - redis
-    devices:
-      - /dev/snd
-    command: bash start.sh
-    env_file: .env
-    links:
-      - pulseaudio:pulseaudio
-      - postgres:postgres
-      - cups:cups
+  # service:
+  #   build: ./service
+  #   volumes:
+  #     - ./service:/www
+  #     - data_storage:/www/attachments:rw
+  #   depends_on:
+  #     - postgres
+  #     - cups
+  #     - redis
+  #   devices:
+  #     - /dev/snd
+  #   command: bash start.sh
+  #   env_file: .env
+  #   links:
+  #     - pulseaudio:pulseaudio
+  #     - postgres:postgres
+  #     - cups:cups
 
-  nginx:
-    build: ./nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-    depends_on:
-      - service
-      - cups
-      - sync
-    env_file: .env
+  # nginx:
+  #   build: ./nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+  #     - ./nginx/ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - service
+  #     - cups
+  #     - sync
+  #   env_file: .env
 
-  postgres:
-    image: postgres:9.5
-    # image: tobi312/rpi-postgresql
-    ports: 
-      - "5432:5432"
-    volumes:
-      - ./dockerfiles:/var/lib/postgresql/data
-    env_file: .env
+  # postgres:
+  #   # image: postgres:9.5
+  #   image: tobi312/rpi-postgresql
+  #   ports: 
+  #     - "5432:5432"
+  #   volumes:
+  #     - ./dockerfiles:/var/lib/postgresql/data
+  #   env_file: .env
 
   sync:
     image: resilio/sync
     # image: yangxuan8282/rpi-resilio-sync
     ports:
-      - "8888:8888"
-      - "55555:55555"
+      - "8887:8888"
+      - "55554:55555"
     volumes:
-      - data_storage:/mnt/sync:rw
+      - ./data:/mnt/sync
     env_file: .env
+    restart: always
 
   deluge:
     image: twanislas/deluge
@@ -81,23 +83,23 @@ services:
       - "8112:8112"
       - "58846:58846"
     volumes:
-      - data_storage:/data:rw
+      - ./data:/data
       - ./deluge:/config
     env_file: .env
+    restart: always
 
-  redis:
-    image: redis:latest
-    # image: hypriot/rpi-redis
-    env_file: .env
+  # redis:
+  #   # image: redis:latest
+  #   image: hypriot/rpi-redis
+  #   env_file: .env
 
   # plex:
-  #   image: binhex/arch-plex:latest
+  #   # image: binhex/arch-plex:latest
+  #   image: jaymoulin/rpi-plex:latest
   #   volumes:
   #     - data_storage:/media
   #     - /etc/localtime:/etc/localtime:ro
-  #     - ./plex_config:/config
+  #     # - ./plex_config:/config
   #   env_file: .env
-
-volumes:
-
-  data_storage:
+  #   ports:
+  #     - "32400:32400"
