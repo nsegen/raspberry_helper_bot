@@ -22,7 +22,7 @@ services:
     # command: bash start-cups.sh
     ports:
       - "630:631"
-    restart: always
+    # restart: always
 
   # service:
   #   build: ./service
@@ -74,7 +74,7 @@ services:
     volumes:
       - ./data:/mnt/sync
     env_file: .env
-    restart: always
+    # restart: always
 
   deluge:
     image: twanislas/deluge
@@ -86,7 +86,7 @@ services:
       - ./data:/data
       - ./deluge:/config
     env_file: .env
-    restart: always
+    # restart: always
 
   # redis:
   #   # image: redis:latest
