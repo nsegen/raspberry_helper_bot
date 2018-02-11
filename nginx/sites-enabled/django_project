@@ -3,19 +3,14 @@ server {
     add_header Access-Control-Allow-Methods "GET, POST, OPTIONS, DELETE";
     add_header Access-Control-Allow-Headers "Content-Type, X-CSRFToken";
     
-    listen 80 default;
-    listen 443 ssl;
+    listen 8080 default;
     charset utf-8;
-    
-    server_name raspberryhelper.ddns.net;
-    ssl on;
-    ssl_certificate /etc/nginx/ssl/nginx.crt;
-    ssl_certificate_key /etc/nginx/ssl/nginx.key;
+    root /www/;
     client_max_body_size       50m;
     
     location / {
         autoindex off;
-        try_files $uri $uri/ @app;
+        try_files $uri $uri/ @ympd;
     }
 
     location /static/ {
@@ -28,27 +23,27 @@ server {
         try_files $uri $uri/ @sync;
     }
 
-    location @app {
+    #location @app {
 
-        client_max_body_size       50m;
-        client_body_buffer_size    128k;
+    #    client_max_body_size       50m;
+    #    client_body_buffer_size    128k;
 
-        proxy_connect_timeout      900;
-        proxy_send_timeout         900;
-        proxy_read_timeout         900;
+    #    proxy_connect_timeout      900;
+    #    proxy_send_timeout         900;
+    #    proxy_read_timeout         900;
 
-        proxy_buffer_size          4k;
-        proxy_buffers              4 32k;
-        proxy_busy_buffers_size    64k;
-        proxy_temp_file_write_size 64k;
+    #    proxy_buffer_size          4k;
+    #    proxy_buffers              4 32k;
+    #    proxy_busy_buffers_size    64k;
+    #    proxy_temp_file_write_size 64k;
 
-        proxy_pass http://service:8000;
-        proxy_redirect     off;
-        proxy_set_header   Host $host;
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header   X-Forwarded-Host $server_name;
-    }
+    #    proxy_pass http://service:8000;
+    #    proxy_redirect     off;
+    #    proxy_set_header   Host $host;
+    #    proxy_set_header   X-Real-IP $remote_addr;
+    #    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    #    proxy_set_header   X-Forwarded-Host $server_name;
+    #}
 
     location @sync {
 
@@ -64,7 +59,29 @@ server {
         proxy_busy_buffers_size    64k;
         proxy_temp_file_write_size 64k;
 
-        proxy_pass https://sync:8888;
+        proxy_pass http://sync:8888;
+        proxy_redirect     off;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Host $server_name;
+    }
+
+    location @ympd {
+
+        client_max_body_size       50m;
+        client_body_buffer_size    128k;
+
+        proxy_connect_timeout      900;
+        proxy_send_timeout         900;
+        proxy_read_timeout         900;
+
+        proxy_buffer_size          4k;
+        proxy_buffers              4 32k;
+        proxy_busy_buffers_size    64k;
+        proxy_temp_file_write_size 64k;
+
+        proxy_pass http://ympd:8080;
         proxy_redirect     off;
         proxy_set_header   Host $host;
         proxy_set_header   X-Real-IP $remote_addr;
