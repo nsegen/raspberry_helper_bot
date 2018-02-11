@@ -1,4 +1,4 @@
-FROM arm64v8/alpine:latest
+FROM arm32v6/alpine:latest
 
 RUN apk --update add ympd
 
