@@ -17,8 +17,8 @@ services:
     volumes:
       - /var/run/dbus:/var/run/dbus
       - /dev/bus/usb:/dev/bus/usb
-    devices:
-      - /dev/usb
+    # devices:
+    #   - /dev/usb
     command: bash start-cups.sh
     ports:
       - "631:631"
