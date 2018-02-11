@@ -11,18 +11,18 @@ services:
   #   ports:
   #     - "4713:4713"
 
-  cups:
-    build: ./cups
-    env_file: .env
-    volumes:
-      - /var/run/dbus:/var/run/dbus
-      - /dev/bus/usb:/dev/bus/usb
-    # devices:
-    #   - /dev/usb
-    command: bash start-cups.sh
-    ports:
-      - "631:631"
-    restart: always
+  # cups:
+  #   build: ./cups
+  #   env_file: .env
+  #   volumes:
+  #     - /var/run/dbus:/var/run/dbus
+  #     - /dev/bus/usb:/dev/bus/usb
+  #   devices:
+  #     - /dev/usb
+  #   command: bash start-cups.sh
+  #   ports:
+  #     - "631:631"
+  #   restart: always
 
   mpd:
     build: ./mpd
@@ -73,7 +73,7 @@ services:
       - ./nginx/sites-enabled:/etc/nginx/sites-enabled
       - ./nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
-      - cups
+      # - cups
       - sync
       - ympd
     env_file: .env
