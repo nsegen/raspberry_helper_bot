@@ -2,41 +2,28 @@ version: "2"
 
 services:
 
-  # pulseaudio:
-  #   image: jess/pulseaudio
-  #   devices:
-  #     - /dev/snd
-  #   volumes:
-  #     - /etc/localtime:/etc/localtime
-  #   ports:
-  #     - "4713:4713"
-
   cups:
     build: ./cups
     env_file: .env
     volumes:
       - /var/run/dbus:/var/run/dbus
       - /dev/bus/usb:/dev/bus/usb
-    devices:
-      - /dev/usb
     command: bash start-cups.sh
     ports:
       - "630:631"
-    restart: "always"
+    restart: "no"
 
   mpd:
-    image: tobi312/rpi-mpd:alpine
+    build: ./mpd
     ports:
       - "6600:6600"
       - "8000:8000"
     volumes:
-      - ./data/folders/Music:/mpd/music:ro
-      - ./data/mpd/playlists:/mpd/playlists
-      - ./data/mpd/conf:/mpd/conf
-      - ./data/mpd/data:/mpd/data
+      - ./data/folders/Music:/mpd/music
+      - ./data/playlists:/mpd/playlists
     devices:
       - /dev/snd
-    restart: "always"
+    restart: "no"
 
   ympd:
     build: ./ympd
@@ -45,8 +32,8 @@ services:
     links:
       - "mpd:mpdhost"
     depends_on:
-      - mpd  
-    restart: "always"
+      - mpd
+    restart: "no"
 
   nginx:
     build: ./nginx
@@ -61,19 +48,20 @@ services:
       - sync
       - ympd
     env_file: .env
+    restart: "no"
 
   sync:
-    image: yangxuan8282/rpi-resilio-sync
+    image: resilio/sync
     ports:
-      - "8888:8888"
+      - "8887:8888"
       - "55554:55555"
     volumes:
       - ./data:/mnt/sync
     env_file: .env
-    restart: "always"
+    restart: "no"
 
   deluge:
-    image: jordancrawford/rpi-deluge
+    image: twanislas/deluge
     ports:
       - "8112:8112"
       - "58846:58846"
@@ -81,4 +69,4 @@ services:
       - ./data:/data
       - ./deluge:/config
     env_file: .env
-    restart: "always"
+    restart: "no"

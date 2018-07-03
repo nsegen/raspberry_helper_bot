@@ -173,3 +173,5 @@ ENV/
 dockerfiles
 deluge
 data
+
+.idea/
