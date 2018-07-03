@@ -1,0 +1,72 @@
+version: "2"
+
+services:
+
+  cups:
+    build: ./cups
+    env_file: .env
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+      - /dev/bus/usb:/dev/bus/usb
+    command: bash start-cups.sh
+    ports:
+      - "630:631"
+    restart: "no"
+
+  mpd:
+    build: ./mpd
+    ports:
+      - "6600:6600"
+      - "8000:8000"
+    volumes:
+      - ./data/folders/Music:/mpd/music
+      - ./data/playlists:/mpd/playlists
+    devices:
+      - /dev/snd
+    restart: "no"
+
+  ympd:
+    build: ./ympd
+    ports:
+      - "8080:8080"
+    links:
+      - "mpd:mpdhost"
+    depends_on:
+      - mpd
+    restart: "no"
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:8080"
+      - "443:443"
+    volumes:
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - cups
+      - sync
+      - ympd
+    env_file: .env
+    restart: "no"
+
+  sync:
+    image: resilio/sync
+    ports:
+      - "8887:8888"
+      - "55554:55555"
+    volumes:
+      - ./data:/mnt/sync
+    env_file: .env
+    restart: "no"
+
+  deluge:
+    image: twanislas/deluge
+    ports:
+      - "8112:8112"
+      - "58846:58846"
+    volumes:
+      - ./data:/data
+      - ./deluge:/config
+    env_file: .env
+    restart: "no"

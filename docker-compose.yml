@@ -11,30 +11,32 @@ services:
   #   ports:
   #     - "4713:4713"
 
-  # cups:
-  #   build: ./cups
-  #   env_file: .env
-  #   volumes:
-  #     - /var/run/dbus:/var/run/dbus
-  #     - /dev/bus/usb:/dev/bus/usb
-  #   devices:
-  #     - /dev/usb
-  #   command: bash start-cups.sh
-  #   ports:
-  #     - "631:631"
-  #   restart: always
+#  cups:
+#    build: ./cups
+#    env_file: .env
+#    volumes:
+#      - /var/run/dbus:/var/run/dbus
+#      - /dev/bus/usb:/dev/bus/usb
+#    devices:
+#      - /dev/usb
+#    command: bash start-cups.sh
+#    ports:
+#      - "630:631"
+#    restart: "always"
 
   mpd:
-    build: ./mpd
+    image: tobi312/rpi-mpd:alpine
     ports:
       - "6600:6600"
       - "8000:8000"
     volumes:
-      - ./data/folders/Music:/mpd/music
-      - ./data/playlists:/mpd/playlists
+      - ./data/folders/Music:/mpd/music:ro
+      - ./data/mpd/playlists:/mpd/playlists
+      - ./data/mpd/conf:/mpd/conf
+      - ./data/mpd/data:/mpd/data
     devices:
       - /dev/snd
-    restart: always
+    restart: "always"
 
   ympd:
     build: ./ympd
@@ -44,25 +46,7 @@ services:
       - "mpd:mpdhost"
     depends_on:
       - mpd  
-    restart: always
-
-  # service:
-  #   build: ./service
-  #   volumes:
-  #     - ./service:/www
-  #     - data_storage:/www/attachments:rw
-  #   depends_on:
-  #     - postgres
-  #     - cups
-  #     - redis
-  #   devices:
-  #     - /dev/snd
-  #   command: bash start.sh
-  #   env_file: .env
-  #   links:
-  #     - pulseaudio:pulseaudio
-  #     - postgres:postgres
-  #     - cups:cups
+    restart: "always"
 
   nginx:
     build: ./nginx
@@ -79,28 +63,17 @@ services:
     env_file: .env
     restart: always
 
-  # postgres:
-  #   # image: postgres:9.5
-  #   image: tobi312/rpi-postgresql
-  #   ports: 
-  #     - "5432:5432"
-  #   volumes:
-  #     - ./dockerfiles:/var/lib/postgresql/data
-  #   env_file: .env
-
   sync:
-    # image: resilio/sync
     image: yangxuan8282/rpi-resilio-sync
     ports:
       - "8888:8888"
-      - "55555:55555"
+      - "55554:55555"
     volumes:
       - ./data:/mnt/sync
     env_file: .env
-    restart: always
+    restart: "always"
 
   deluge:
-    # image: twanislas/deluge
     image: jordancrawford/rpi-deluge
     ports:
       - "8112:8112"
@@ -109,21 +82,4 @@ services:
       - ./data:/data
       - ./deluge:/config
     env_file: .env
-    restart: always
-  
-  # redis:
-  #   # image: redis:latest
-  #   image: hypriot/rpi-redis
-  #   env_file: .env
-
-  # plex:
-  #   # image: binhex/arch-plex:latest
-  #   image: jaymoulin/rpi-plex:latest
-  #   volumes:
-  #     - data_storage:/media
-  #     - /etc/localtime:/etc/localtime:ro
-  #     # - ./plex_config:/config
-  #   env_file: .env
-  #   ports:
-  #     - "32400:32400"
-
+    restart: "always"
